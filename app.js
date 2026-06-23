@@ -8,14 +8,15 @@
   /* ---------- Config you can edit in one place ---------- */
 
   // Foods are simple data objects. Add / edit / remove freely.
+  // Grams of protein / carbs / fat per tap.
   const FOODS = [
-    { name: '3 eggs / omelette',     protein_grams: 18, emoji: '🥚' },
-    { name: '1 tuna can',            protein_grams: 25, emoji: '🐟' },
-    { name: 'Chicken breast piece',  protein_grams: 30, emoji: '🍗' },
-    { name: 'Cottage cheese',        protein_grams: 13, emoji: '🧀' },
-    { name: 'PB toast',              protein_grams: 7,  emoji: '🥜' },
-    { name: 'Seafood (eating out)',  protein_grams: 25, emoji: '🦐' },
-    { name: 'Yogurt',                protein_grams: 8,  emoji: '🍦' },
+    { name: '3 eggs / omelette',     protein_grams: 18, carbs_grams: 1,  fat_grams: 15, emoji: '🥚' },
+    { name: '1 tuna can',            protein_grams: 25, carbs_grams: 0,  fat_grams: 1,  emoji: '🐟' },
+    { name: 'Chicken breast piece',  protein_grams: 30, carbs_grams: 0,  fat_grams: 3,  emoji: '🍗' },
+    { name: 'Cottage cheese',        protein_grams: 13, carbs_grams: 5,  fat_grams: 4,  emoji: '🧀' },
+    { name: 'PB toast',              protein_grams: 7,  carbs_grams: 15, fat_grams: 8,  emoji: '🥜' },
+    { name: 'Seafood (eating out)',  protein_grams: 25, carbs_grams: 5,  fat_grams: 5,  emoji: '🦐' },
+    { name: 'Yogurt',                protein_grams: 8,  carbs_grams: 12, fat_grams: 4,  emoji: '🍦' },
   ];
 
   const PROTEIN_TARGET = 80;     // grams ≈ enough for the day
@@ -81,8 +82,12 @@
     return (arr || []).map((f) => {
       if (typeof f === 'number') {
         const p = FOODS[f];
-        return p ? { name: p.name, emoji: p.emoji, protein: p.protein_grams, preset: f } : null;
+        return p ? { name: p.name, emoji: p.emoji, protein: p.protein_grams,
+          carbs: p.carbs_grams, fat: p.fat_grams, preset: f } : null;
       }
+      // older typed entries may lack carbs/fat — default them to 0
+      if (f && f.carbs == null) f.carbs = 0;
+      if (f && f.fat == null) f.fat = 0;
       return f;
     }).filter(Boolean);
   }
@@ -153,11 +158,15 @@
 
   function renderProtein() {
     const total = state.today.foods.reduce((sum, e) => sum + (e.protein || 0), 0);
+    const carbs = state.today.foods.reduce((sum, e) => sum + (e.carbs || 0), 0);
+    const fat = state.today.foods.reduce((sum, e) => sum + (e.fat || 0), 0);
     const pct = clamp(Math.round((total / PROTEIN_TARGET) * 100), 0, 100);
     const portionsDone = clamp(Math.floor(total / (PROTEIN_TARGET / PROTEIN_PORTIONS)), 0, PROTEIN_PORTIONS);
 
     $('#proteinFill').style.width = pct + '%';
     $('#proteinPortions').textContent = portionsDone + ' of ' + PROTEIN_PORTIONS + ' done';
+    $('#macrosLine').textContent =
+      'Protein ' + total + ' g · carbs ' + carbs + ' g · fat ' + fat + ' g today';
 
     const bar = $('#proteinBar');
     bar.setAttribute('aria-valuenow', String(pct));
@@ -332,7 +341,8 @@
         '<span class="food__name">' + f.name + '</span>' +
         '<span class="food__badge" hidden></span>';
       btn.addEventListener('click', () => {
-        state.today.foods.push({ name: f.name, emoji: f.emoji, protein: f.protein_grams, preset: i });
+        state.today.foods.push({ name: f.name, emoji: f.emoji, protein: f.protein_grams,
+          carbs: f.carbs_grams, fat: f.fat_grams, preset: i });
         save();
         renderProtein();
       });
@@ -352,35 +362,35 @@
     half: 0.5, couple: 2, few: 3, some: 1,
   };
 
-  // protein is grams per unit (per egg, per slice, per can, per serving).
+  // grams per unit (per egg, per slice, per can, per serving): p=protein, c=carbs, f=fat.
   const FOOD_KB = [
-    { keys: ['omelette', 'omelet'], emoji: '🍳', protein: 18 },
-    { keys: ['egg'], emoji: '🥚', protein: 6 },
-    { keys: ['toast', 'bread', 'slice'], emoji: '🍞', protein: 3, bread: true },
-    { keys: ['chicken'], emoji: '🍗', protein: 30 },
-    { keys: ['turkey'], emoji: '🦃', protein: 28 },
-    { keys: ['tuna'], emoji: '🐟', protein: 25 },
-    { keys: ['salmon'], emoji: '🐟', protein: 22 },
-    { keys: ['cottage cheese'], emoji: '🧀', protein: 13 },
-    { keys: ['cheese'], emoji: '🧀', protein: 4 },
-    { keys: ['peanut butter', 'pb'], emoji: '🥜', protein: 4 },
-    { keys: ['yogurt', 'yoghurt'], emoji: '🍦', protein: 8 },
-    { keys: ['shrimp', 'prawn', 'seafood'], emoji: '🦐', protein: 25 },
-    { keys: ['beef', 'steak'], emoji: '🥩', protein: 25 },
-    { keys: ['mince', 'lamb'], emoji: '🥩', protein: 24 },
-    { keys: ['milk'], emoji: '🥛', protein: 8 },
-    { keys: ['rice'], emoji: '🍚', protein: 5 },
-    { keys: ['pasta', 'spaghetti', 'noodle'], emoji: '🍝', protein: 8 },
-    { keys: ['lentil', 'dal', 'daal'], emoji: '🍲', protein: 9 },
-    { keys: ['chickpea', 'hummus'], emoji: '🧆', protein: 8 },
-    { keys: ['bean'], emoji: '🫘', protein: 8 },
-    { keys: ['tofu'], emoji: '🧈', protein: 10 },
-    { keys: ['oat', 'porridge'], emoji: '🥣', protein: 5 },
-    { keys: ['protein shake', 'protein powder', 'whey'], emoji: '🥤', protein: 25 },
-    { keys: ['almond', 'cashew', 'walnut', 'nuts'], emoji: '🥜', protein: 6 },
-    { keys: ['banana'], emoji: '🍌', protein: 1 },
-    { keys: ['apple'], emoji: '🍎', protein: 0.5 },
-    { keys: ['fish'], emoji: '🐟', protein: 22 },
+    { keys: ['omelette', 'omelet'], emoji: '🍳', p: 18, c: 1, f: 15 },
+    { keys: ['egg'], emoji: '🥚', p: 6, c: 0.5, f: 5 },
+    { keys: ['toast', 'bread', 'slice'], emoji: '🍞', p: 3, c: 13, f: 1, bread: true },
+    { keys: ['chicken'], emoji: '🍗', p: 30, c: 0, f: 3 },
+    { keys: ['turkey'], emoji: '🦃', p: 28, c: 0, f: 2 },
+    { keys: ['tuna'], emoji: '🐟', p: 25, c: 0, f: 1 },
+    { keys: ['salmon'], emoji: '🐟', p: 22, c: 0, f: 13 },
+    { keys: ['cottage cheese'], emoji: '🧀', p: 13, c: 5, f: 4 },
+    { keys: ['cheese'], emoji: '🧀', p: 4, c: 0, f: 4 },
+    { keys: ['peanut butter', 'pb'], emoji: '🥜', p: 4, c: 3, f: 8 },
+    { keys: ['yogurt', 'yoghurt'], emoji: '🍦', p: 8, c: 12, f: 4 },
+    { keys: ['shrimp', 'prawn', 'seafood'], emoji: '🦐', p: 25, c: 2, f: 2 },
+    { keys: ['beef', 'steak'], emoji: '🥩', p: 25, c: 0, f: 15 },
+    { keys: ['mince', 'lamb'], emoji: '🥩', p: 24, c: 0, f: 15 },
+    { keys: ['milk'], emoji: '🥛', p: 8, c: 12, f: 5 },
+    { keys: ['rice'], emoji: '🍚', p: 5, c: 45, f: 0.5 },
+    { keys: ['pasta', 'spaghetti', 'noodle'], emoji: '🍝', p: 8, c: 43, f: 1 },
+    { keys: ['lentil', 'dal', 'daal'], emoji: '🍲', p: 9, c: 20, f: 0.5 },
+    { keys: ['chickpea', 'hummus'], emoji: '🧆', p: 8, c: 22, f: 3 },
+    { keys: ['bean'], emoji: '🫘', p: 8, c: 20, f: 0.5 },
+    { keys: ['tofu'], emoji: '🧈', p: 10, c: 2, f: 6 },
+    { keys: ['oat', 'porridge'], emoji: '🥣', p: 5, c: 27, f: 3 },
+    { keys: ['protein shake', 'protein powder', 'whey'], emoji: '🥤', p: 25, c: 5, f: 2 },
+    { keys: ['almond', 'cashew', 'walnut', 'nuts'], emoji: '🥜', p: 6, c: 6, f: 14 },
+    { keys: ['banana'], emoji: '🍌', p: 1, c: 27, f: 0.5 },
+    { keys: ['apple'], emoji: '🍎', p: 0.5, c: 25, f: 0.3 },
+    { keys: ['fish'], emoji: '🐟', p: 22, c: 0, f: 5 },
   ];
 
   function pullQuantity(seg) {
@@ -427,38 +437,59 @@
 
       const kb = matchFood(rest);
       if (kb) {
-        let unit = kb.protein;
-        if (kb.bread && /brown|whole|wheat|rye|multigrain|granary|seeded/.test(rest)) unit = 4;
-        return { name, emoji: kb.emoji, protein: Math.round(qty * unit), recognized: true };
+        let pUnit = kb.p;
+        if (kb.bread && /brown|whole|wheat|rye|multigrain|granary|seeded/.test(rest)) pUnit = 4;
+        return {
+          name, emoji: kb.emoji, recognized: true,
+          protein: Math.round(qty * pUnit),
+          carbs: Math.round(qty * kb.c),
+          fat: Math.round(qty * kb.f),
+        };
       }
-      // remembered from a previous time?
+      // remembered from a previous time? (protein only)
       const remembered = Object.keys(state.customFoods).find((k) => rest.indexOf(k) !== -1);
       if (remembered) {
-        return { name, emoji: '🍽️', protein: Math.round(qty * state.customFoods[remembered]), recognized: true };
+        return {
+          name, emoji: '🍽️', recognized: true,
+          protein: Math.round(qty * state.customFoods[remembered]), carbs: 0, fat: 0,
+        };
       }
-      return { name, emoji: '🍽️', protein: 0, recognized: false, foodKey: rest, qty: qty };
+      return { name, emoji: '🍽️', protein: 0, carbs: 0, fat: 0, recognized: false, foodKey: rest, qty: qty };
     });
+  }
+
+  function macroLabel(p, c, f) {
+    return p + ' g protein · ' + c + ' g carbs · ' + f + ' g fat';
   }
 
   function renderMealPreview(items) {
     const box = $('#mealPreview');
-    const total = items.reduce((s, it) => s + (it.protein || 0), 0);
     const anyUnknown = items.some((it) => !it.recognized);
+    const totals = () => items.reduce((t, it, idx) => {
+      let p = it.protein;
+      if (!it.recognized) {
+        const inp = box.querySelector('.meal-preview__ask[data-row="' + idx + '"]');
+        p = inp && inp.value ? Number(inp.value) : 0;
+      }
+      return { p: t.p + p, c: t.c + it.carbs, f: t.f + it.fat };
+    }, { p: 0, c: 0, f: 0 });
 
-    let html = '<p class="meal-preview__total" id="mealTotal">About ' + total + ' g — looks right?</p>';
+    const t0 = items.reduce((t, it) => ({ p: t.p + it.protein, c: t.c + it.carbs, f: t.f + it.fat }), { p: 0, c: 0, f: 0 });
+
+    let html = '<p class="meal-preview__total" id="mealTotal">About ' + macroLabel(t0.p, t0.c, t0.f) + ' — looks right?</p>';
     items.forEach((it, i) => {
       html += '<div class="meal-preview__item">' +
         '<span aria-hidden="true">' + it.emoji + '</span>' +
         '<span class="meal-preview__name">' + it.name + '</span>';
       if (it.recognized) {
-        html += '<span class="meal-preview__g">' + it.protein + ' g</span>';
+        html += '<span class="meal-preview__g">' + it.protein + 'p · ' + it.carbs + 'c · ' + it.fat + 'f</span>';
       } else {
         html += '<input class="meal-preview__ask" type="number" inputmode="numeric" min="0" ' +
-          'data-row="' + i + '" placeholder="g?" aria-label="protein grams for ' + it.name + '" />';
+          'data-row="' + i + '" placeholder="protein g?" aria-label="protein grams for ' + it.name + '" />';
       }
       html += '</div>';
     });
-    if (anyUnknown) html += '<p class="meal-preview__hint">Didn\'t recognise some — pop in the grams if you know them (I\'ll remember).</p>';
+    if (anyUnknown) html += '<p class="meal-preview__hint">Didn\'t recognise some — pop in the protein grams if you know them (I\'ll remember).</p>';
     html += '<div class="meal-preview__actions">' +
       '<button class="btn btn--ghost" id="mealCancel" type="button">Cancel</button>' +
       '<button class="btn btn--add" id="mealSave" type="button">Save</button>' +
@@ -467,15 +498,11 @@
     box.innerHTML = html;
     box.hidden = false;
 
-    // Live-update the total as unknown grams are typed.
+    // Live-update the totals as unknown protein grams are typed.
     box.querySelectorAll('.meal-preview__ask').forEach((inp) => {
       inp.addEventListener('input', () => {
-        const sum = items.reduce((s, it, idx) => {
-          if (it.recognized) return s + it.protein;
-          const f = box.querySelector('.meal-preview__ask[data-row="' + idx + '"]');
-          return s + (f && f.value ? Number(f.value) : 0);
-        }, 0);
-        $('#mealTotal').textContent = 'About ' + sum + ' g — looks right?';
+        const t = totals();
+        $('#mealTotal').textContent = 'About ' + macroLabel(t.p, t.c, t.f) + ' — looks right?';
       });
     });
 
@@ -491,7 +518,7 @@
           // Remember it for next time (per unit), if she gave a number.
           if (grams && it.foodKey && it.qty) state.customFoods[it.foodKey] = grams / it.qty;
         }
-        state.today.foods.push({ name: it.name, emoji: it.emoji, protein: grams });
+        state.today.foods.push({ name: it.name, emoji: it.emoji, protein: grams, carbs: it.carbs, fat: it.fat });
       });
       box.hidden = true; box.innerHTML = '';
       $('#mealText').value = '';

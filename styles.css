@@ -227,6 +227,15 @@ p { margin: 0; }
 }
 .food__badge[hidden] { display: none; }
 
+/* ---- Daily macros line ---- */
+.macros {
+  margin: 10px 2px 0;
+  color: var(--ink-soft);
+  font-weight: 600;
+  font-size: 0.95rem;
+  font-variant-numeric: tabular-nums;
+}
+
 /* ---- "What I ate" free-text entry ---- */
 .meal-entry { margin-top: 14px; }
 .meal-entry__label {
