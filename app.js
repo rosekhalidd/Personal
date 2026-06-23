@@ -549,8 +549,7 @@
     const m = $('#authModal');
     m.hidden = false;
     $('#authStepEmail').hidden = false;
-    $('#authStepCode').hidden = true;
-    $('#authMsg').textContent = "Enter your email and we'll send a 6-digit code.";
+    $('#authMsg').textContent = "Enter your email and we'll send a sign-in link.";
     $('#authEmail').focus();
   }
   function closeAuthModal() {
@@ -568,31 +567,22 @@
       if (e.target === $('#authModal')) closeAuthModal();
     });
 
-    let pendingEmail = '';
     $('#authSend').addEventListener('click', async () => {
       const email = $('#authEmail').value.trim();
       if (!email) { $('#authMsg').textContent = 'Please enter your email.'; return; }
       $('#authSend').disabled = true;
       $('#authMsg').textContent = 'Sending…';
-      const { error } = await supa.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+      // Come back to this exact page after clicking the email link.
+      const redirect = window.location.origin + window.location.pathname;
+      const { error } = await supa.auth.signInWithOtp({
+        email,
+        options: { shouldCreateUser: true, emailRedirectTo: redirect },
+      });
       $('#authSend').disabled = false;
       if (error) { $('#authMsg').textContent = 'Could not send: ' + error.message; return; }
-      pendingEmail = email;
       $('#authStepEmail').hidden = true;
-      $('#authStepCode').hidden = false;
-      $('#authMsg').textContent = 'Check your email and enter the 6-digit code.';
-      $('#authCode').focus();
-    });
-
-    $('#authVerify').addEventListener('click', async () => {
-      const token = $('#authCode').value.trim();
-      if (!token) { $('#authMsg').textContent = 'Enter the code from your email.'; return; }
-      $('#authVerify').disabled = true;
-      $('#authMsg').textContent = 'Verifying…';
-      const { error } = await supa.auth.verifyOtp({ email: pendingEmail, token, type: 'email' });
-      $('#authVerify').disabled = false;
-      if (error) { $('#authMsg').textContent = 'Wrong or expired code. Try again.'; return; }
-      // Success → onAuthStateChange takes over (pull + subscribe + close).
+      $('#authMsg').textContent =
+        'Link sent. Open your email on this device and tap "Sign in" — you\'ll come right back here, synced.';
     });
   }
 
