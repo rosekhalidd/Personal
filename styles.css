@@ -468,6 +468,54 @@ p { margin: 0; }
   body { font-size: 19px; }
 }
 
+/* ---- Sync bar ---- */
+.sync-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+.sync-bar__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex: none;
+}
+.sync-bar--on .sync-bar__dot { background: var(--good); box-shadow: 0 0 8px var(--good); }
+.sync-bar__status { color: var(--ink-soft); font-size: 0.9rem; font-weight: 600; }
+.sync-bar .btn { margin-left: auto; }
+
+/* ---- Modal ---- */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(8,5,20,.7);
+  backdrop-filter: blur(3px);
+}
+.modal[hidden] { display: none; }
+.modal__card {
+  width: 100%;
+  max-width: 380px;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+.modal__card h2 { font-size: 1.4rem; margin-bottom: 6px; }
+.modal__label { display: block; margin: 14px 0 6px; color: var(--ink-soft); font-weight: 600; }
+.btn--block { width: 100%; margin-top: 12px; }
+
 /* ---- Reduced motion ---- */
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }

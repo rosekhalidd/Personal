@@ -70,6 +70,20 @@
         bmi: 18.2,
         next: '',
       },
+      lastModified: 0,      // ms timestamp — used to settle sync conflicts
+    };
+  }
+
+  // Merge a saved/synced blob onto defaults so new fields never break it.
+  function normalize(parsed) {
+    if (!parsed || typeof parsed !== 'object') return defaultState();
+    const base = defaultState();
+    return {
+      today: Object.assign(base.today, parsed.today || {}),
+      history: parsed.history || {},
+      week: parsed.week || {},
+      scan: Object.assign(base.scan, parsed.scan || {}),
+      lastModified: parsed.lastModified || 0,
     };
   }
 
@@ -77,27 +91,27 @@
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return defaultState();
-      const parsed = JSON.parse(raw);
-      // Merge defaults so new fields don't break old saves.
-      const base = defaultState();
-      return {
-        today: Object.assign(base.today, parsed.today),
-        history: parsed.history || {},
-        week: parsed.week || {},
-        scan: Object.assign(base.scan, parsed.scan),
-      };
+      return normalize(JSON.parse(raw));
     } catch (e) {
       console.warn('Could not read saved data, starting fresh.', e);
       return defaultState();
     }
   }
 
-  function save() {
+  // Persist to this device only (no timestamp bump, no cloud push).
+  function saveLocalOnly() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (e) {
       console.warn('Could not save data.', e);
     }
+  }
+
+  // A real edit: stamp it, persist locally, and schedule a cloud push.
+  function save() {
+    state.lastModified = Date.now();
+    saveLocalOnly();
+    schedulePush();
   }
 
   let state = load();
@@ -422,10 +436,171 @@
     });
   }
 
+  /* ============================================================
+     Cloud sync (Supabase) — optional. The app works fully without
+     it; signing in just keeps phone + laptop in sync. Config lives
+     in config.js so the keys are easy to set in one place.
+     ============================================================ */
+
+  const cfg = window.HEALTH_CONFIG || {};
+  let supa = null;       // Supabase client
+  let user = null;       // signed-in user, or null
+  let pushTimer = null;  // debounce timer for pushes
+  let channel = null;    // realtime subscription
+  let adopting = false;  // guard so adopting cloud data doesn't re-push
+
+  function syncConfigured() {
+    return !!(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase);
+  }
+
+  function setSyncStatus(text, on) {
+    const bar = $('#syncBar');
+    const status = $('#syncStatus');
+    const btn = $('#syncBtn');
+    if (!bar) return;
+    bar.hidden = false;
+    status.textContent = text;
+    bar.classList.toggle('sync-bar--on', !!on);
+    btn.textContent = on ? 'Sign out' : 'Sign in to sync';
+  }
+
+  async function initCloud() {
+    if (!syncConfigured()) return; // leave the sync bar hidden
+    supa = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+    wireAuthUI();
+    const { data } = await supa.auth.getSession();
+    await handleSession(data.session);
+    supa.auth.onAuthStateChange((_event, session) => { handleSession(session); });
+  }
+
+  async function handleSession(session) {
+    const next = session ? session.user : null;
+    const changed = (next && next.id) !== (user && user.id);
+    user = next;
+    if (user) {
+      setSyncStatus('Synced · ' + user.email, true);
+      closeAuthModal();
+      if (changed) { await pullCloud(); subscribeCloud(); }
+    } else {
+      setSyncStatus('Not syncing — this device only', false);
+      if (channel) { supa.removeChannel(channel); channel = null; }
+    }
+  }
+
+  // Adopt a cloud blob into local state and re-render.
+  function adopt(blob) {
+    adopting = true;
+    state = normalize(blob);
+    adopting = false;
+    rolloverIfNewDay();
+    saveLocalOnly();
+    renderAll();
+  }
+
+  async function pullCloud() {
+    if (!user || !supa) return;
+    const { data, error } = await supa
+      .from('dashboards').select('data, updated_at')
+      .eq('user_id', user.id).maybeSingle();
+    if (error) { console.warn('Pull failed', error.message); return; }
+
+    if (data && data.data && Object.keys(data.data).length) {
+      const cloudTime = data.data.lastModified || 0;
+      // Newer side wins. Tie goes to cloud so a fresh device adopts it.
+      if (cloudTime >= (state.lastModified || 0)) adopt(data.data);
+      else pushCloud();
+    } else {
+      pushCloud(); // no cloud copy yet — seed it from this device
+    }
+  }
+
+  function schedulePush() {
+    if (!user || !supa || adopting) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(pushCloud, 700);
+  }
+
+  async function pushCloud() {
+    if (!user || !supa) return;
+    const { error } = await supa.from('dashboards').upsert(
+      { user_id: user.id, data: state, updated_at: new Date().toISOString() },
+      { onConflict: 'user_id' });
+    if (error) console.warn('Push failed', error.message);
+  }
+
+  function subscribeCloud() {
+    if (!user || !supa) return;
+    if (channel) supa.removeChannel(channel);
+    channel = supa.channel('dash-' + user.id)
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: 'dashboards', filter: 'user_id=eq.' + user.id },
+        (payload) => {
+          const blob = payload.new && payload.new.data;
+          if (!blob) return;
+          // Only adopt if the other device's copy is genuinely newer.
+          if ((blob.lastModified || 0) > (state.lastModified || 0)) adopt(blob);
+        })
+      .subscribe();
+  }
+
+  /* ---------- Auth modal wiring ---------- */
+
+  function openAuthModal() {
+    const m = $('#authModal');
+    m.hidden = false;
+    $('#authStepEmail').hidden = false;
+    $('#authStepCode').hidden = true;
+    $('#authMsg').textContent = "Enter your email and we'll send a 6-digit code.";
+    $('#authEmail').focus();
+  }
+  function closeAuthModal() {
+    const m = $('#authModal');
+    if (m) m.hidden = true;
+  }
+
+  function wireAuthUI() {
+    $('#syncBtn').addEventListener('click', async () => {
+      if (user) { await supa.auth.signOut(); }
+      else { openAuthModal(); }
+    });
+    $('#authCancel').addEventListener('click', closeAuthModal);
+    $('#authModal').addEventListener('click', (e) => {
+      if (e.target === $('#authModal')) closeAuthModal();
+    });
+
+    let pendingEmail = '';
+    $('#authSend').addEventListener('click', async () => {
+      const email = $('#authEmail').value.trim();
+      if (!email) { $('#authMsg').textContent = 'Please enter your email.'; return; }
+      $('#authSend').disabled = true;
+      $('#authMsg').textContent = 'Sending…';
+      const { error } = await supa.auth.signInWithOtp({ email, options: { shouldCreateUser: true } });
+      $('#authSend').disabled = false;
+      if (error) { $('#authMsg').textContent = 'Could not send: ' + error.message; return; }
+      pendingEmail = email;
+      $('#authStepEmail').hidden = true;
+      $('#authStepCode').hidden = false;
+      $('#authMsg').textContent = 'Check your email and enter the 6-digit code.';
+      $('#authCode').focus();
+    });
+
+    $('#authVerify').addEventListener('click', async () => {
+      const token = $('#authCode').value.trim();
+      if (!token) { $('#authMsg').textContent = 'Enter the code from your email.'; return; }
+      $('#authVerify').disabled = true;
+      $('#authMsg').textContent = 'Verifying…';
+      const { error } = await supa.auth.verifyOtp({ email: pendingEmail, token, type: 'email' });
+      $('#authVerify').disabled = false;
+      if (error) { $('#authMsg').textContent = 'Wrong or expired code. Try again.'; return; }
+      // Success → onAuthStateChange takes over (pull + subscribe + close).
+    });
+  }
+
   /* ---------- Boot ---------- */
 
   rolloverIfNewDay();
   buildFoodButtons();
   wireEvents();
   renderAll();
+  initCloud();
 })();
