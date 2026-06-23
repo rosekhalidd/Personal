@@ -17,6 +17,11 @@
       <p class="app-date" id="todayLabel">—</p>
     </div>
     <p class="app-sub">Strength, muscle, tone — one tap at a time.</p>
+    <div class="sync-bar" id="syncBar" hidden>
+      <span class="sync-bar__dot" aria-hidden="true"></span>
+      <span class="sync-bar__status" id="syncStatus">Not syncing</span>
+      <button class="btn btn--sm btn--ghost" id="syncBtn" type="button">Sign in to sync</button>
+    </div>
   </header>
 
   <main class="layout">
@@ -247,6 +252,25 @@
     <span class="muted">Saved on this device.</span>
   </footer>
 
+  <!-- Sign-in dialog for cloud sync -->
+  <div class="modal" id="authModal" hidden role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal__card">
+      <h2 id="authTitle">Sign in to sync</h2>
+      <p class="muted" id="authMsg">Enter your email and we'll send a 6-digit code.</p>
+
+      <div id="authStepEmail">
+        <label class="modal__label" for="authEmail">Email</label>
+        <input id="authEmail" class="field field--full" type="email" inputmode="email"
+               autocomplete="email" placeholder="you@example.com" />
+        <button class="btn btn--add btn--block" id="authSend" type="button">Send sign-in link</button>
+      </div>
+
+      <button class="btn btn--ghost btn--sm btn--block" id="authCancel" type="button">Cancel</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
