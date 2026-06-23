@@ -70,19 +70,35 @@
         bmi: 18.2,
         next: '',
       },
+      customFoods: {},      // remembered protein for foods you typed once
       lastModified: 0,      // ms timestamp — used to settle sync conflicts
     };
+  }
+
+  // Older saves stored foods as preset indexes; new ones store objects
+  // { name, emoji, protein, preset? }. Convert any old entries.
+  function migrateFoods(arr) {
+    return (arr || []).map((f) => {
+      if (typeof f === 'number') {
+        const p = FOODS[f];
+        return p ? { name: p.name, emoji: p.emoji, protein: p.protein_grams, preset: f } : null;
+      }
+      return f;
+    }).filter(Boolean);
   }
 
   // Merge a saved/synced blob onto defaults so new fields never break it.
   function normalize(parsed) {
     if (!parsed || typeof parsed !== 'object') return defaultState();
     const base = defaultState();
+    const today = Object.assign(base.today, parsed.today || {});
+    today.foods = migrateFoods(today.foods);
     return {
-      today: Object.assign(base.today, parsed.today || {}),
+      today: today,
       history: parsed.history || {},
       week: parsed.week || {},
       scan: Object.assign(base.scan, parsed.scan || {}),
+      customFoods: parsed.customFoods || {},
       lastModified: parsed.lastModified || 0,
     };
   }
@@ -136,8 +152,7 @@
   }
 
   function renderProtein() {
-    const total = state.today.foods.reduce(
-      (sum, i) => sum + (FOODS[i] ? FOODS[i].protein_grams : 0), 0);
+    const total = state.today.foods.reduce((sum, e) => sum + (e.protein || 0), 0);
     const pct = clamp(Math.round((total / PROTEIN_TARGET) * 100), 0, 100);
     const portionsDone = clamp(Math.floor(total / (PROTEIN_TARGET / PROTEIN_PORTIONS)), 0, PROTEIN_PORTIONS);
 
@@ -152,25 +167,24 @@
     else if (total === 0) status.textContent = "Let's get some protein in";
     else status.textContent = 'On the way — keep tapping';
 
-    // Per-food count badges
+    // Per-food count badges (preset buttons only)
     document.querySelectorAll('.food').forEach((btn) => {
       const idx = Number(btn.dataset.food);
-      const count = state.today.foods.filter((i) => i === idx).length;
+      const count = state.today.foods.filter((e) => e.preset === idx).length;
       const badge = btn.querySelector('.food__badge');
       if (count > 0) { badge.textContent = '×' + count; badge.hidden = false; }
       else { badge.hidden = true; }
     });
 
-    // Eaten chips (each removable = undo a tap)
+    // Eaten chips (each removable = undo)
     const eaten = $('#eatenList');
     eaten.innerHTML = '';
-    state.today.foods.forEach((idx, position) => {
-      const f = FOODS[idx];
+    state.today.foods.forEach((f, position) => {
       if (!f) return;
       const chip = document.createElement('span');
       chip.className = 'chip';
       chip.innerHTML =
-        '<span aria-hidden="true">' + f.emoji + '</span>' +
+        '<span aria-hidden="true">' + (f.emoji || '🍽️') + '</span>' +
         '<span>' + f.name + '</span>';
       const undo = document.createElement('button');
       undo.className = 'chip__undo';
@@ -318,7 +332,7 @@
         '<span class="food__name">' + f.name + '</span>' +
         '<span class="food__badge" hidden></span>';
       btn.addEventListener('click', () => {
-        state.today.foods.push(i);
+        state.today.foods.push({ name: f.name, emoji: f.emoji, protein: f.protein_grams, preset: i });
         save();
         renderProtein();
       });
@@ -326,9 +340,180 @@
     });
   }
 
+  /* ============================================================
+     "What I ate" estimator — parses plain text like
+     "2 eggs and brown toast" into protein grams. No AI, no keys.
+     Foods + per-unit protein live in FOOD_KB; easy to extend.
+     ============================================================ */
+
+  const NUM_WORDS = {
+    a: 1, an: 1, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6,
+    seven: 7, eight: 8, nine: 9, ten: 10, eleven: 11, twelve: 12,
+    half: 0.5, couple: 2, few: 3, some: 1,
+  };
+
+  // protein is grams per unit (per egg, per slice, per can, per serving).
+  const FOOD_KB = [
+    { keys: ['omelette', 'omelet'], emoji: '🍳', protein: 18 },
+    { keys: ['egg'], emoji: '🥚', protein: 6 },
+    { keys: ['toast', 'bread', 'slice'], emoji: '🍞', protein: 3, bread: true },
+    { keys: ['chicken'], emoji: '🍗', protein: 30 },
+    { keys: ['turkey'], emoji: '🦃', protein: 28 },
+    { keys: ['tuna'], emoji: '🐟', protein: 25 },
+    { keys: ['salmon'], emoji: '🐟', protein: 22 },
+    { keys: ['cottage cheese'], emoji: '🧀', protein: 13 },
+    { keys: ['cheese'], emoji: '🧀', protein: 4 },
+    { keys: ['peanut butter', 'pb'], emoji: '🥜', protein: 4 },
+    { keys: ['yogurt', 'yoghurt'], emoji: '🍦', protein: 8 },
+    { keys: ['shrimp', 'prawn', 'seafood'], emoji: '🦐', protein: 25 },
+    { keys: ['beef', 'steak'], emoji: '🥩', protein: 25 },
+    { keys: ['mince', 'lamb'], emoji: '🥩', protein: 24 },
+    { keys: ['milk'], emoji: '🥛', protein: 8 },
+    { keys: ['rice'], emoji: '🍚', protein: 5 },
+    { keys: ['pasta', 'spaghetti', 'noodle'], emoji: '🍝', protein: 8 },
+    { keys: ['lentil', 'dal', 'daal'], emoji: '🍲', protein: 9 },
+    { keys: ['chickpea', 'hummus'], emoji: '🧆', protein: 8 },
+    { keys: ['bean'], emoji: '🫘', protein: 8 },
+    { keys: ['tofu'], emoji: '🧈', protein: 10 },
+    { keys: ['oat', 'porridge'], emoji: '🥣', protein: 5 },
+    { keys: ['protein shake', 'protein powder', 'whey'], emoji: '🥤', protein: 25 },
+    { keys: ['almond', 'cashew', 'walnut', 'nuts'], emoji: '🥜', protein: 6 },
+    { keys: ['banana'], emoji: '🍌', protein: 1 },
+    { keys: ['apple'], emoji: '🍎', protein: 0.5 },
+    { keys: ['fish'], emoji: '🐟', protein: 22 },
+  ];
+
+  function pullQuantity(seg) {
+    // digit (incl. decimal)
+    let m = seg.match(/(\d+(?:\.\d+)?)/);
+    if (m) return { qty: parseFloat(m[1]), rest: seg.replace(m[1], ' ').trim() };
+    // fraction like 1/2
+    m = seg.match(/(\d+)\s*\/\s*(\d+)/);
+    if (m) return { qty: (+m[1]) / (+m[2]), rest: seg.replace(m[0], ' ').trim() };
+    // number word
+    const tokens = seg.split(/\s+/);
+    for (let i = 0; i < tokens.length; i++) {
+      if (NUM_WORDS[tokens[i]] != null) {
+        const qty = NUM_WORDS[tokens[i]];
+        tokens.splice(i, 1);
+        return { qty: qty, rest: tokens.join(' ').trim() };
+      }
+    }
+    return { qty: 1, rest: seg.trim() };
+  }
+
+  function matchFood(rest) {
+    let best = null, bestLen = 0;
+    FOOD_KB.forEach((entry) => {
+      entry.keys.forEach((k) => {
+        if (rest.indexOf(k) !== -1 && k.length > bestLen) { best = entry; bestLen = k.length; }
+      });
+    });
+    return best;
+  }
+
+  // Returns [{ name, emoji, protein, recognized, foodKey, qty }]
+  function parseMeal(text) {
+    const segments = text.toLowerCase()
+      .replace(/\band\b|\bwith\b|\bplus\b/g, ',')
+      .split(/[,+;\n]/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+
+    return segments.map((seg) => {
+      const { qty, rest } = pullQuantity(seg);
+      const display = seg.replace(/\s+/g, ' ').trim();
+      const name = display.charAt(0).toUpperCase() + display.slice(1);
+
+      const kb = matchFood(rest);
+      if (kb) {
+        let unit = kb.protein;
+        if (kb.bread && /brown|whole|wheat|rye|multigrain|granary|seeded/.test(rest)) unit = 4;
+        return { name, emoji: kb.emoji, protein: Math.round(qty * unit), recognized: true };
+      }
+      // remembered from a previous time?
+      const remembered = Object.keys(state.customFoods).find((k) => rest.indexOf(k) !== -1);
+      if (remembered) {
+        return { name, emoji: '🍽️', protein: Math.round(qty * state.customFoods[remembered]), recognized: true };
+      }
+      return { name, emoji: '🍽️', protein: 0, recognized: false, foodKey: rest, qty: qty };
+    });
+  }
+
+  function renderMealPreview(items) {
+    const box = $('#mealPreview');
+    const total = items.reduce((s, it) => s + (it.protein || 0), 0);
+    const anyUnknown = items.some((it) => !it.recognized);
+
+    let html = '<p class="meal-preview__total" id="mealTotal">About ' + total + ' g — looks right?</p>';
+    items.forEach((it, i) => {
+      html += '<div class="meal-preview__item">' +
+        '<span aria-hidden="true">' + it.emoji + '</span>' +
+        '<span class="meal-preview__name">' + it.name + '</span>';
+      if (it.recognized) {
+        html += '<span class="meal-preview__g">' + it.protein + ' g</span>';
+      } else {
+        html += '<input class="meal-preview__ask" type="number" inputmode="numeric" min="0" ' +
+          'data-row="' + i + '" placeholder="g?" aria-label="protein grams for ' + it.name + '" />';
+      }
+      html += '</div>';
+    });
+    if (anyUnknown) html += '<p class="meal-preview__hint">Didn\'t recognise some — pop in the grams if you know them (I\'ll remember).</p>';
+    html += '<div class="meal-preview__actions">' +
+      '<button class="btn btn--ghost" id="mealCancel" type="button">Cancel</button>' +
+      '<button class="btn btn--add" id="mealSave" type="button">Save</button>' +
+      '</div>';
+
+    box.innerHTML = html;
+    box.hidden = false;
+
+    // Live-update the total as unknown grams are typed.
+    box.querySelectorAll('.meal-preview__ask').forEach((inp) => {
+      inp.addEventListener('input', () => {
+        const sum = items.reduce((s, it, idx) => {
+          if (it.recognized) return s + it.protein;
+          const f = box.querySelector('.meal-preview__ask[data-row="' + idx + '"]');
+          return s + (f && f.value ? Number(f.value) : 0);
+        }, 0);
+        $('#mealTotal').textContent = 'About ' + sum + ' g — looks right?';
+      });
+    });
+
+    $('#mealCancel').addEventListener('click', () => {
+      box.hidden = true; box.innerHTML = '';
+    });
+    $('#mealSave').addEventListener('click', () => {
+      items.forEach((it, idx) => {
+        let grams = it.protein;
+        if (!it.recognized) {
+          const f = box.querySelector('.meal-preview__ask[data-row="' + idx + '"]');
+          grams = f && f.value ? Number(f.value) : 0;
+          // Remember it for next time (per unit), if she gave a number.
+          if (grams && it.foodKey && it.qty) state.customFoods[it.foodKey] = grams / it.qty;
+        }
+        state.today.foods.push({ name: it.name, emoji: it.emoji, protein: grams });
+      });
+      box.hidden = true; box.innerHTML = '';
+      $('#mealText').value = '';
+      save();
+      renderProtein();
+    });
+  }
+
   /* ---------- Wire up interactions ---------- */
 
   function wireEvents() {
+    // "What I ate" estimator
+    const runEstimate = () => {
+      const text = $('#mealText').value.trim();
+      if (!text) return;
+      renderMealPreview(parseMeal(text));
+    };
+    $('#mealEstimate').addEventListener('click', runEstimate);
+    $('#mealText').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') { e.preventDefault(); runEstimate(); }
+    });
+
     // Water
     $('#addGlass').addEventListener('click', () => {
       state.today.water = clamp(state.today.water + WATER_STEP, 0, 10000);

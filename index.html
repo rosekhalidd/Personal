@@ -48,6 +48,16 @@
 
         <div class="foods" id="foodButtons" role="group" aria-label="Tap a food you ate"></div>
 
+        <div class="meal-entry">
+          <label class="meal-entry__label" for="mealText">Or write what you ate</label>
+          <div class="meal-entry__row">
+            <input id="mealText" class="field" type="text"
+                   placeholder="e.g. 2 eggs and brown toast" autocomplete="off" />
+            <button class="btn btn--add" id="mealEstimate" type="button">Work it out</button>
+          </div>
+          <div class="meal-preview" id="mealPreview" hidden aria-live="polite"></div>
+        </div>
+
         <div class="eaten" id="eatenList" aria-live="polite" aria-label="Foods eaten today"></div>
       </div>
 
@@ -249,7 +259,6 @@
 
   <footer class="app-footer">
     <button class="btn btn--ghost btn--sm" id="resetToday" type="button">Reset today</button>
-    <span class="muted">Saved on this device.</span>
   </footer>
 
   <!-- Sign-in dialog for cloud sync -->
