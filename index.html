@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#1b1140" />
+  <title>My health dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💪</text></svg>" />
+</head>
+<body>
+  <a class="skip-link" href="#today">Skip to today</a>
+
+  <header class="app-header">
+    <div class="app-header__row">
+      <h1 class="app-title">My health dashboard</h1>
+      <p class="app-date" id="todayLabel">—</p>
+    </div>
+    <p class="app-sub">Strength, muscle, tone — one tap at a time.</p>
+  </header>
+
+  <main class="layout">
+
+    <!-- ===================== PANEL 1 — TODAY ===================== -->
+    <section class="panel panel--today" id="today" aria-labelledby="today-heading">
+      <div class="panel__head">
+        <h2 id="today-heading">Today</h2>
+        <span class="panel__tag">Resets each day</span>
+      </div>
+
+      <!-- Protein -->
+      <div class="card" aria-labelledby="protein-heading">
+        <div class="card__head">
+          <h3 id="protein-heading">Protein</h3>
+          <span class="card__count" id="proteinPortions">0 of 3 done</span>
+        </div>
+
+        <div class="bar" role="progressbar" aria-labelledby="protein-heading"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="proteinBar">
+          <div class="bar__fill bar__fill--protein" id="proteinFill"></div>
+          <span class="bar__label" id="proteinStatus">Let's get some protein in</span>
+        </div>
+
+        <div class="foods" id="foodButtons" role="group" aria-label="Tap a food you ate"></div>
+
+        <div class="eaten" id="eatenList" aria-live="polite" aria-label="Foods eaten today"></div>
+      </div>
+
+      <!-- Water -->
+      <div class="card" aria-labelledby="water-heading">
+        <div class="card__head">
+          <h3 id="water-heading">Water</h3>
+          <span class="card__count" id="waterCount">0.00 of 2 L</span>
+        </div>
+        <div class="bar" role="progressbar" aria-labelledby="water-heading"
+             aria-valuemin="0" aria-valuemax="2000" aria-valuenow="0" id="waterBar">
+          <div class="bar__fill bar__fill--water" id="waterFill"></div>
+        </div>
+        <div class="row-actions">
+          <button class="btn btn--add" id="addGlass" type="button">+ 1 glass (250 ml)</button>
+          <button class="btn btn--ghost" id="undoWater" type="button">Undo</button>
+        </div>
+      </div>
+
+      <!-- Meals -->
+      <div class="card" aria-labelledby="meals-heading">
+        <div class="card__head">
+          <h3 id="meals-heading">Meals</h3>
+        </div>
+        <div class="toggles" id="mealToggles" role="group" aria-label="Mark meals eaten">
+          <button class="toggle" type="button" data-meal="breakfast" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🌅</span> Breakfast
+          </button>
+          <button class="toggle" type="button" data-meal="lunch" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🥗</span> Lunch
+          </button>
+          <button class="toggle toggle--key" type="button" data-meal="dinner" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🍽️</span> Dinner
+            <span class="toggle__hint">don't skip</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Workout -->
+      <div class="card" aria-labelledby="workout-heading">
+        <div class="card__head">
+          <h3 id="workout-heading">Workout</h3>
+          <span class="card__count" id="workoutState">Not set</span>
+        </div>
+        <div class="toggles" id="workoutTypes" role="group" aria-label="Pick today's workout">
+          <button class="toggle" type="button" data-workout="strength" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🏋️</span> Strength
+          </button>
+          <button class="toggle" type="button" data-workout="calisthenics" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🤸</span> Calisthenics
+          </button>
+          <button class="toggle" type="button" data-workout="rest" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">😌</span> Rest
+          </button>
+        </div>
+        <button class="btn btn--done" id="workoutDone" type="button" aria-pressed="false">Mark done</button>
+      </div>
+
+      <!-- Daily habits -->
+      <div class="card" aria-labelledby="habits-heading">
+        <div class="card__head">
+          <h3 id="habits-heading">Daily habits</h3>
+        </div>
+        <div class="toggles toggles--wrap">
+          <button class="toggle" type="button" data-habit="core" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🌬️</span> Core (gentle)
+          </button>
+          <button class="toggle" type="button" data-habit="stretch" aria-pressed="false">
+            <span class="toggle__emoji" aria-hidden="true">🧘</span> Stretch
+          </button>
+        </div>
+        <div class="sleep">
+          <label for="sleepHours">Sleep last night (hours)</label>
+          <div class="stepper">
+            <button class="btn btn--step" id="sleepMinus" type="button" aria-label="Less sleep">−</button>
+            <input id="sleepHours" class="stepper__input" type="number" inputmode="decimal"
+                   min="0" max="14" step="0.5" value="" placeholder="—" />
+            <button class="btn btn--step" id="sleepPlus" type="button" aria-label="More sleep">+</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PANEL 2 — THIS WEEK ===================== -->
+    <aside class="side">
+      <section class="panel panel--week" aria-labelledby="week-heading">
+        <div class="panel__head">
+          <h2 id="week-heading">This week</h2>
+          <span class="panel__tag" id="weekRange">—</span>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <h3>Workouts done</h3>
+            <span class="card__count" id="weekWorkoutCount">0 of 4</span>
+          </div>
+          <div class="bar bar--sm" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0" id="weekWorkoutBar">
+            <div class="bar__fill bar__fill--workout" id="weekWorkoutFill"></div>
+          </div>
+          <p class="muted">Target days: Sat · Sun · Tue · Wed</p>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <h3>Bodyweight</h3>
+            <span class="card__count" id="bwTrend"></span>
+          </div>
+          <div class="inline-field">
+            <input id="bodyweight" class="field" type="number" inputmode="decimal" min="30" max="120" step="0.1" placeholder="kg" />
+            <button class="btn btn--add" id="saveBodyweight" type="button">Save</button>
+          </div>
+          <p class="muted">Goal range: 46–48 kg</p>
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <h3>Top lift check</h3>
+          </div>
+          <input id="lift1" class="field field--full" type="text" placeholder="e.g. Goblet squat 12 × 4 kg" />
+          <input id="lift2" class="field field--full" type="text" placeholder="e.g. Dumbbell row 10 × 5 kg" />
+        </div>
+
+        <div class="card">
+          <div class="card__head">
+            <h3>How the body feels</h3>
+          </div>
+          <textarea id="weekNote" class="field field--full" rows="3" placeholder="Energy, aches, wins this week…"></textarea>
+        </div>
+      </section>
+
+      <!-- ===================== PANEL 3 — BODY COMPOSITION ===================== -->
+      <section class="panel panel--body" aria-labelledby="body-heading">
+        <div class="panel__head">
+          <h2 id="body-heading">Body composition</h2>
+          <span class="panel__tag">From InBody scans</span>
+        </div>
+
+        <div class="card card--headline">
+          <div class="card__head">
+            <h3>Skeletal muscle mass</h3>
+            <span class="card__count" id="muscleNow">17.7 kg</span>
+          </div>
+          <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="24.4" aria-valuenow="17.7" id="muscleBar">
+            <div class="bar__fill bar__fill--muscle" id="muscleFill"></div>
+            <span class="bar__label" id="muscleStatus">+6.7 kg to target</span>
+          </div>
+          <p class="muted">Target 24.4 kg — the headline number.</p>
+        </div>
+
+        <dl class="stats">
+          <div class="stats__item"><dt>Last scan</dt><dd id="scanDate">17 Jun 2026</dd></div>
+          <div class="stats__item"><dt>Weight</dt><dd id="scanWeight">44.4 kg</dd></div>
+          <div class="stats__item"><dt>Body fat</dt><dd id="scanFat">24.3%</dd></div>
+          <div class="stats__item"><dt>BMI</dt><dd id="scanBmi">18.2</dd></div>
+        </dl>
+
+        <div class="inline-field">
+          <label for="nextScan" class="inline-field__label">Next scan</label>
+          <input id="nextScan" class="field" type="date" />
+        </div>
+        <details class="edit-scan">
+          <summary>Update scan numbers</summary>
+          <div class="edit-scan__grid">
+            <label>Date <input id="editScanDate" type="date" /></label>
+            <label>Weight kg <input id="editScanWeight" type="number" step="0.1" /></label>
+            <label>Muscle kg <input id="editScanMuscle" type="number" step="0.1" /></label>
+            <label>Target kg <input id="editScanTarget" type="number" step="0.1" /></label>
+            <label>Body fat % <input id="editScanFat" type="number" step="0.1" /></label>
+            <label>BMI <input id="editScanBmi" type="number" step="0.1" /></label>
+          </div>
+          <button class="btn btn--add" id="saveScan" type="button">Save scan</button>
+        </details>
+      </section>
+
+      <!-- Plan reference -->
+      <details class="panel panel--plan">
+        <summary><h2>Plan reference</h2></summary>
+        <div class="plan-body">
+          <h3>Nutrition</h3>
+          <p>~80 g protein/day (≈3 portions), 2 L water, carbs on training days, don't skip dinner. Easy foods: eggs, tuna, chicken, rice, pasta, salad, apple, cottage cheese, yogurt, PB toast, seafood out.</p>
+          <h3>Training week</h3>
+          <ul>
+            <li><strong>Sat</strong> — strength (dumbbells + bands)</li>
+            <li><strong>Sun</strong> — strength</li>
+            <li><strong>Tue</strong> — beginner calisthenics class</li>
+            <li><strong>Wed</strong> — strength or mobility</li>
+            <li><strong>Mon / Thu / Fri</strong> — rest + daily stretch</li>
+          </ul>
+          <h3>Strength moves <span class="muted">(2–3 sets, 10–12 reps)</span></h3>
+          <p>Goblet squat, dumbbell/band row, shoulder press, glute bridge, band pull-apart, Romanian deadlift. Warm up 5 min mobility every session.</p>
+          <h3>Core — gentle / diastasis-safe only</h3>
+          <p>Deep core breathing, heel slides, dead bug, bird-dog. Avoid crunches, sit-ups, full planks until the ab separation is checked by a professional.</p>
+          <h3>Stretch <span class="muted">(desk stiffness)</span></h3>
+          <p>Hip flexors, chest/doorway, hamstrings, neck/traps.</p>
+        </div>
+      </details>
+    </aside>
+  </main>
+
+  <footer class="app-footer">
+    <button class="btn btn--ghost btn--sm" id="resetToday" type="button">Reset today</button>
+    <span class="muted">Saved on this device.</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
