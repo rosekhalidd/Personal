@@ -6,232 +6,193 @@
   <title>National Property Buyers — Sell Your House As-Is, Fast &amp; Fair</title>
   <meta name="description" content="National Property Buyers pays cash for houses in any condition across all 50 states. No repairs, no commissions, no waiting. Get a fair written offer and close in under 30 days." />
 
-  <!-- ===== Fonts ===== -->
+  <!-- ===== Fonts (match brand: Playfair Display headings + Inter body) ===== -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --navy: #0f2a43;
-      --navy-deep: #0a1f33;
-      --green: #1f9d5b;
-      --green-dark: #167a46;
-      --gold: #f2b705;
-      --ink: #1d2a35;
-      --muted: #5b6b78;
-      --line: #e4e9ee;
-      --bg: #ffffff;
-      --bg-soft: #f5f8fa;
-      --radius: 14px;
-      --shadow: 0 10px 30px rgba(15, 42, 67, 0.10);
-      --shadow-sm: 0 4px 14px rgba(15, 42, 67, 0.08);
+      --navy: #0c1a3c;
+      --navy-2: #11244e;
+      --gold: #d4972a;
+      --gold-soft: #e3b25a;
+      --ink: #0a1226;
+      --cream: #f6f3ec;
+      --paper: #ffffff;
+      --muted: #5b6478;
+      --line: rgba(212, 151, 42, .35);
+      --good: #1c7a3e;
+      --bad: #b3261e;
+      --shadow: 0 18px 50px rgba(8, 16, 40, .18);
+      --shadow-sm: 0 8px 24px rgba(8, 16, 40, .10);
+      --maxw: 1180px;
+      --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      color: var(--ink);
-      background: var(--bg);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
+    body { font-family: var(--sans); color: var(--ink); background: var(--paper); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3 { font-family: var(--serif); line-height: 1.1; font-weight: 700; }
     a { color: inherit; text-decoration: none; }
     img { max-width: 100%; display: block; }
-    .wrap { width: 100%; max-width: 1140px; margin: 0 auto; padding: 0 22px; }
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
 
     /* ===== Buttons ===== */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-weight: 700; font-size: 1rem; line-height: 1;
-      padding: 15px 26px; border-radius: 999px; cursor: pointer;
-      border: 2px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
-    }
-    .btn-primary { background: var(--green); color: #fff; box-shadow: 0 8px 20px rgba(31,157,91,.35); }
-    .btn-primary:hover { background: var(--green-dark); transform: translateY(-2px); }
-    .btn-gold { background: var(--gold); color: var(--navy-deep); box-shadow: 0 8px 20px rgba(242,183,5,.35); }
-    .btn-gold:hover { transform: translateY(-2px); filter: brightness(1.03); }
-    .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.5); }
-    .btn-ghost:hover { background: rgba(255,255,255,.12); }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; font-family: var(--sans); font-weight: 700; font-size: 1rem; line-height: 1; padding: 15px 26px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: transform .15s ease, box-shadow .15s ease, background .15s ease, color .15s ease; }
+    .btn-gold { background: var(--gold); color: var(--navy); }
+    .btn-gold:hover { background: var(--gold-soft); transform: translateY(-2px); box-shadow: 0 12px 26px rgba(212,151,42,.35); }
+    .btn-ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-navy { background: var(--navy); color: #fff; }
+    .btn-navy:hover { background: var(--navy-2); transform: translateY(-2px); }
+    .btn-block { width: 100%; }
 
     /* ===== Header ===== */
-    header {
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,255,255,.95); backdrop-filter: blur(8px);
-      border-bottom: 1px solid var(--line);
-    }
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
-    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 1.18rem; color: var(--navy); }
-    .brand .mark {
-      width: 38px; height: 38px; border-radius: 9px;
-      background: linear-gradient(135deg, var(--green), var(--navy));
-      display: grid; place-items: center; color: #fff; font-size: 1.1rem;
-    }
-    .brand small { display: block; font-size: .68rem; font-weight: 600; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
-    .nav-links { display: flex; align-items: center; gap: 28px; }
-    .nav-links a { font-weight: 600; color: var(--ink); font-size: .96rem; }
-    .nav-links a:hover { color: var(--green); }
+    header { position: sticky; top: 0; z-index: 50; background: rgba(12,26,60,.97); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 78px; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
+    .brand img { height: 52px; width: auto; border-radius: 50%; }
+    .brand .bname { font-family: var(--serif); font-weight: 700; font-size: 1.16rem; letter-spacing: .01em; line-height: 1.1; }
+    .brand .bname small { display: block; font-family: var(--sans); font-size: .66rem; font-weight: 600; color: var(--gold-soft); letter-spacing: 1.2px; text-transform: uppercase; margin-top: 2px; }
+    .nav-links { display: flex; align-items: center; gap: 26px; }
+    .nav-links a { font-weight: 600; color: rgba(255,255,255,.88); font-size: .95rem; }
+    .nav-links a:hover { color: var(--gold); }
     .nav-cta { display: flex; align-items: center; gap: 14px; }
-    .nav-phone { font-weight: 700; color: var(--navy); white-space: nowrap; }
-    .menu-toggle { display: none; background: none; border: 0; cursor: pointer; font-size: 1.6rem; color: var(--navy); }
+    .nav-phone { font-weight: 700; color: #fff; white-space: nowrap; }
+    .nav-phone:hover { color: var(--gold); }
+    .menu-toggle { display: none; background: none; border: 0; cursor: pointer; font-size: 1.6rem; color: #fff; }
 
     /* ===== Hero ===== */
-    .hero {
-      background:
-        radial-gradient(1100px 500px at 80% -10%, rgba(31,157,91,.22), transparent 60%),
-        linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%);
-      color: #fff; position: relative; overflow: hidden;
-    }
-    .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding-top: 70px; padding-bottom: 80px; }
-    .eyebrow {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(255,255,255,.10); border: 1px solid rgba(255,255,255,.18);
-      padding: 7px 14px; border-radius: 999px; font-size: .82rem; font-weight: 600; margin-bottom: 22px;
-    }
-    .eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
-    .hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.35rem); line-height: 1.1; font-weight: 800; letter-spacing: -.5px; }
-    .hero h1 .accent { color: var(--gold); }
-    .hero p.lead { margin-top: 20px; font-size: 1.13rem; color: rgba(255,255,255,.85); max-width: 540px; }
-    .hero-actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 14px; }
-    .trust-row { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 22px; color: rgba(255,255,255,.82); font-size: .92rem; font-weight: 600; }
-    .trust-row span { display: inline-flex; align-items: center; gap: 8px; }
-    .trust-row .check { color: var(--green); font-weight: 800; }
+    .hero { position: relative; overflow: hidden; color: #fff;
+      background: linear-gradient(115deg, rgba(10,21,48,.97) 0%, rgba(10,21,48,.90) 46%, rgba(17,36,78,.86) 100%); }
+    .hero::after { /* gold swoosh signature */
+      content: ""; position: absolute; left: -6%; top: -20%; width: 60%; height: 150%;
+      border-right: 3px solid var(--gold); transform: skewX(-12deg); opacity: .5; pointer-events: none; }
+    .hero::before { content: ""; position: absolute; right: -10%; bottom: -30%; width: 480px; height: 480px;
+      background: radial-gradient(circle, rgba(212,151,42,.18), transparent 65%); pointer-events: none; }
+    .hero-grid { position: relative; z-index: 2; display: grid; grid-template-columns: 1.15fr .85fr; gap: 48px; align-items: center; padding: 74px 0 84px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); text-transform: uppercase; letter-spacing: .14em; font-size: .76rem; font-weight: 700; color: var(--gold-soft); }
+    .eyebrow .line { width: 30px; height: 1px; background: var(--gold); }
+    .hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); margin: 18px 0 12px; letter-spacing: .01em; }
+    .hero h1 em { font-style: normal; color: var(--gold); }
+    .hero p.lead { font-size: 1.18rem; color: #d7dded; max-width: 42ch; margin: 0 0 26px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 30px; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 16px; border-radius: 999px; font-size: .86rem; font-weight: 600; letter-spacing: .02em; background: rgba(255,255,255,.07); border: 1px solid var(--line); color: #eef1f8; }
+    .pill .star { color: var(--gold); }
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
 
-    /* Hero form card */
-    .offer-card {
-      background: #fff; color: var(--ink); border-radius: 18px; padding: 28px;
-      box-shadow: 0 24px 60px rgba(0,0,0,.30);
-    }
-    .offer-card h3 { font-size: 1.32rem; color: var(--navy); }
-    .offer-card .sub { color: var(--muted); font-size: .92rem; margin: 6px 0 18px; }
+    /* Lead form card */
+    .lead-card { background: var(--paper); color: var(--ink); border-radius: 16px; padding: 30px 28px; box-shadow: var(--shadow); border-top: 5px solid var(--gold); }
+    .lead-card h3 { font-size: 1.5rem; color: var(--navy); }
+    .lead-card .sub { font-family: var(--sans); color: var(--muted); font-size: .94rem; margin: 7px 0 18px; }
     .field { margin-bottom: 13px; }
-    .field label { display: block; font-size: .82rem; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
-    .field input, .field textarea, .field select {
-      width: 100%; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 10px;
-      font-family: inherit; font-size: .96rem; color: var(--ink); background: #fff;
-    }
-    .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px rgba(31,157,91,.15); }
+    .field label { display: block; font-size: .8rem; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+    .field input, .field textarea { width: 100%; padding: 12px 13px; border: 1.5px solid #d8dde7; border-radius: 8px; font-family: var(--sans); font-size: .96rem; color: var(--ink); background: #fff; }
+    .field input:focus, .field textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,151,42,.18); }
     .field textarea { resize: vertical; min-height: 70px; }
-    .form-note { font-size: .76rem; color: var(--muted); margin-top: 12px; text-align: center; }
+    .form-note { font-size: .75rem; color: var(--muted); margin-top: 12px; text-align: center; }
+    .form-note a { color: var(--gold); font-weight: 600; }
 
     /* ===== Section base ===== */
-    section { padding: 84px 0; }
-    .section-head { text-align: center; max-width: 680px; margin: 0 auto 52px; }
-    .tag { display: inline-block; color: var(--green); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; font-size: .8rem; margin-bottom: 12px; }
-    .section-head h2 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); color: var(--navy); line-height: 1.15; letter-spacing: -.5px; }
-    .section-head p { margin-top: 14px; color: var(--muted); font-size: 1.05rem; }
-    .soft { background: var(--bg-soft); }
+    section { padding: 88px 0; }
+    .cream { background: var(--cream); }
+    .navy-sec { background: var(--navy); color: #fff; }
+    .section-head { text-align: center; max-width: 700px; margin: 0 auto 54px; }
+    .tag { display: inline-flex; align-items: center; gap: 9px; font-family: var(--sans); color: var(--gold); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; font-size: .78rem; margin-bottom: 14px; }
+    .tag::before, .tag::after { content: ""; width: 22px; height: 1px; background: var(--gold); opacity: .6; }
+    .section-head h2 { font-size: clamp(2rem, 4vw, 2.9rem); color: var(--navy); margin-bottom: 12px; }
+    .navy-sec .section-head h2 { color: #fff; }
+    .section-head p { font-family: var(--sans); color: var(--muted); font-size: 1.06rem; }
+    .navy-sec .section-head p { color: #c9d1e3; }
 
     /* ===== Steps ===== */
     .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-    .step {
-      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 28px 24px; box-shadow: var(--shadow-sm); position: relative;
-    }
-    .step .num {
-      width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--green), var(--navy));
-      color: #fff; font-weight: 800; font-size: 1.1rem; display: grid; place-items: center; margin-bottom: 16px;
-    }
-    .step h4 { font-size: 1.1rem; color: var(--navy); margin-bottom: 6px; }
-    .step p { color: var(--muted); font-size: .95rem; }
+    .step { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 30px 24px; box-shadow: var(--shadow-sm); position: relative; }
+    .step .num { font-family: var(--serif); width: 50px; height: 50px; border-radius: 50%; background: var(--navy); color: var(--gold); font-weight: 700; font-size: 1.3rem; display: grid; place-items: center; margin-bottom: 16px; border: 1px solid var(--gold); }
+    .step h4 { font-family: var(--serif); font-size: 1.18rem; color: var(--navy); margin-bottom: 7px; }
+    .step p { font-family: var(--sans); color: var(--muted); font-size: .95rem; }
 
-    /* ===== Why us / benefits ===== */
-    .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-    .benefit {
-      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 30px 26px; box-shadow: var(--shadow-sm); transition: transform .15s ease, box-shadow .15s ease;
-    }
-    .benefit:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-    .benefit .ico {
-      width: 52px; height: 52px; border-radius: 13px; background: rgba(31,157,91,.12);
-      color: var(--green); display: grid; place-items: center; font-size: 1.5rem; margin-bottom: 16px;
-    }
-    .benefit h4 { color: var(--navy); font-size: 1.16rem; margin-bottom: 8px; }
-    .benefit p { color: var(--muted); font-size: .96rem; }
+    /* ===== Why us ===== */
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .why-card { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 32px 26px; box-shadow: var(--shadow-sm); transition: transform .15s ease, box-shadow .15s ease; }
+    .why-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .why-card .ico { width: 54px; height: 54px; border-radius: 50%; background: var(--cream); color: var(--gold); display: grid; place-items: center; font-size: 1.5rem; margin-bottom: 16px; border: 1px solid var(--line); }
+    .why-card h4 { font-family: var(--serif); color: var(--navy); font-size: 1.22rem; margin-bottom: 8px; }
+    .why-card p { font-family: var(--sans); color: var(--muted); font-size: .96rem; }
 
     /* ===== Compare ===== */
-    .compare-table {
-      width: 100%; border-collapse: separate; border-spacing: 0;
-      background: #fff; border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm);
-    }
-    .compare-table th, .compare-table td { padding: 18px 22px; text-align: left; border-bottom: 1px solid var(--line); font-size: .98rem; }
-    .compare-table thead th { background: var(--navy); color: #fff; font-size: 1rem; }
-    .compare-table thead th.you { background: var(--green); }
+    .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); font-family: var(--sans); }
+    .compare-table th, .compare-table td { padding: 18px 22px; text-align: left; border-bottom: 1px solid #ede7da; font-size: .98rem; }
+    .compare-table thead th { font-family: var(--serif); background: var(--navy); color: #fff; font-size: 1.05rem; font-weight: 700; }
+    .compare-table thead th.you { background: var(--gold); color: var(--navy); }
     .compare-table tbody tr:last-child td { border-bottom: 0; }
     .compare-table td.feature { font-weight: 700; color: var(--navy); }
     .compare-table td.them { color: var(--muted); }
-    .compare-table td.us { color: var(--green-dark); font-weight: 700; }
-    .compare-table .col-us { background: rgba(31,157,91,.05); }
+    .compare-table td.us { color: var(--good); font-weight: 700; }
+    .compare-table .col-us { background: rgba(28,122,62,.06); }
+    .compare-table td.them::before { content: "\2717  "; color: var(--bad); font-weight: 700; }
+    .compare-table td.us::before { content: "\2713  "; color: var(--good); font-weight: 700; }
 
     /* ===== Reviews ===== */
     .reviews { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-    .review {
-      background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
-      padding: 28px; box-shadow: var(--shadow-sm);
-    }
-    .stars { color: var(--gold); font-size: 1.05rem; margin-bottom: 12px; letter-spacing: 2px; }
-    .review p { color: var(--ink); font-size: 1.02rem; font-style: italic; }
-    .review .who { margin-top: 16px; font-weight: 700; color: var(--navy); font-style: normal; }
+    .review { background: var(--paper); border: 1px solid var(--line); border-radius: 14px; padding: 30px; box-shadow: var(--shadow-sm); }
+    .stars { color: var(--gold); font-size: 1.05rem; margin-bottom: 13px; letter-spacing: 3px; }
+    .review p { font-family: var(--serif); color: var(--ink); font-size: 1.12rem; font-style: italic; line-height: 1.5; }
+    .review .who { font-family: var(--sans); margin-top: 16px; font-weight: 700; color: var(--navy); font-style: normal; }
     .review .who small { display: block; font-weight: 500; color: var(--muted); font-style: normal; }
 
     /* ===== CTA band ===== */
-    .cta-band {
-      background:
-        radial-gradient(800px 360px at 85% 120%, rgba(242,183,5,.20), transparent 60%),
-        linear-gradient(135deg, var(--green-dark), var(--navy));
-      color: #fff; border-radius: 22px; padding: 56px 44px; text-align: center;
-    }
-    .cta-band h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); }
-    .cta-band p { margin: 14px auto 28px; color: rgba(255,255,255,.88); max-width: 560px; font-size: 1.06rem; }
-    .cta-actions { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
+    .cta-band { position: relative; overflow: hidden; background: linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; border-radius: 20px; padding: 60px 44px; text-align: center; border: 1px solid var(--line); }
+    .cta-band::after { content: ""; position: absolute; right: -8%; top: -40%; width: 380px; height: 380px; background: radial-gradient(circle, rgba(212,151,42,.20), transparent 65%); }
+    .cta-band h2 { position: relative; font-size: clamp(1.9rem, 3.4vw, 2.7rem); }
+    .cta-band p { position: relative; font-family: var(--sans); margin: 14px auto 28px; color: #d7dded; max-width: 560px; font-size: 1.06rem; }
+    .cta-actions { position: relative; display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; }
 
     /* ===== Contact ===== */
-    #contact .wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
-    .contact-info h2 { font-size: clamp(1.8rem, 3.4vw, 2.4rem); color: var(--navy); }
-    .contact-info p.intro { color: var(--muted); margin-top: 14px; font-size: 1.05rem; }
+    #contact .grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 48px; align-items: start; }
+    .contact-info h2 { font-size: clamp(2rem, 4vw, 2.7rem); color: var(--navy); }
+    .contact-info p.intro { font-family: var(--sans); color: var(--muted); margin-top: 14px; font-size: 1.05rem; }
     .contact-list { margin-top: 26px; display: grid; gap: 16px; }
     .contact-item { display: flex; gap: 14px; align-items: flex-start; }
-    .contact-item .ico { width: 44px; height: 44px; border-radius: 11px; background: rgba(31,157,91,.12); color: var(--green); display: grid; place-items: center; font-size: 1.2rem; flex-shrink: 0; }
-    .contact-item .label { font-size: .8rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .5px; }
-    .contact-item .val { font-weight: 700; color: var(--navy); font-size: 1.08rem; }
-    .contact-form { background: #fff; border: 1px solid var(--line); border-radius: 18px; padding: 30px; box-shadow: var(--shadow); }
-    .contact-form h3 { color: var(--navy); font-size: 1.3rem; margin-bottom: 4px; }
-    .contact-form .sub { color: var(--muted); font-size: .92rem; margin-bottom: 18px; }
+    .contact-item .ico { width: 46px; height: 46px; border-radius: 50%; background: var(--cream); color: var(--gold); display: grid; place-items: center; font-size: 1.2rem; flex-shrink: 0; border: 1px solid var(--line); }
+    .contact-item .label { font-family: var(--sans); font-size: .78rem; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .6px; }
+    .contact-item .val { font-family: var(--sans); font-weight: 700; color: var(--navy); font-size: 1.08rem; }
+    .contact-form { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 32px; box-shadow: var(--shadow); border-top: 5px solid var(--gold); }
+    .contact-form h3 { color: var(--navy); font-size: 1.4rem; margin-bottom: 5px; }
+    .contact-form .sub { font-family: var(--sans); color: var(--muted); font-size: .92rem; margin-bottom: 18px; }
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
 
     /* ===== Footer ===== */
-    footer { background: var(--navy-deep); color: rgba(255,255,255,.78); padding: 56px 0 26px; }
-    .footer-top { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 36px; padding-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,.12); }
-    .footer-brand .brand { color: #fff; margin-bottom: 14px; }
-    .footer-brand p { font-size: .94rem; max-width: 320px; }
-    .footer-col h5 { color: #fff; font-size: .95rem; margin-bottom: 14px; letter-spacing: .5px; }
-    .footer-col a { display: block; padding: 5px 0; font-size: .94rem; }
-    .footer-col a:hover { color: var(--green); }
-    .footer-bottom { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; padding-top: 22px; font-size: .85rem; color: rgba(255,255,255,.6); }
-    .footer-bottom a { color: rgba(255,255,255,.75); }
-    .footer-bottom a:hover { color: var(--green); }
+    footer { background: var(--ink); color: rgba(255,255,255,.75); padding: 58px 0 26px; }
+    .footer-top { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 38px; padding-bottom: 32px; border-bottom: 1px solid rgba(212,151,42,.25); }
+    .footer-brand .brand { margin-bottom: 14px; }
+    .footer-brand p { font-family: var(--sans); font-size: .94rem; max-width: 330px; }
+    .footer-col h5 { font-family: var(--serif); color: #fff; font-size: 1.05rem; margin-bottom: 14px; }
+    .footer-col a { font-family: var(--sans); display: block; padding: 5px 0; font-size: .94rem; }
+    .footer-col a:hover { color: var(--gold); }
+    .footer-bottom { font-family: var(--sans); display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; padding-top: 22px; font-size: .85rem; color: rgba(255,255,255,.55); }
+    .footer-bottom a { color: rgba(255,255,255,.7); }
+    .footer-bottom a:hover { color: var(--gold); }
 
     /* ===== Responsive ===== */
     @media (max-width: 920px) {
-      .hero .wrap { grid-template-columns: 1fr; padding-top: 48px; padding-bottom: 56px; }
-      .steps { grid-template-columns: repeat(2, 1fr); }
-      .benefits { grid-template-columns: 1fr; }
+      .hero-grid { grid-template-columns: 1fr; gap: 34px; padding: 48px 0 60px; }
+      .steps { grid-template-columns: 1fr 1fr; }
+      .why-grid { grid-template-columns: 1fr; }
       .reviews { grid-template-columns: 1fr; }
-      #contact .wrap { grid-template-columns: 1fr; }
+      #contact .grid { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; gap: 26px; }
       .nav-links, .nav-phone { display: none; }
       .menu-toggle { display: block; }
-      .nav-links.open {
-        display: flex; flex-direction: column; position: absolute; top: 72px; left: 0; right: 0;
-        background: #fff; border-bottom: 1px solid var(--line); padding: 18px 22px; gap: 16px;
-      }
+      .nav-links.open { display: flex; flex-direction: column; position: absolute; top: 78px; left: 0; right: 0; background: var(--navy); border-bottom: 1px solid var(--line); padding: 18px 22px; gap: 16px; }
     }
     @media (max-width: 520px) {
       .steps { grid-template-columns: 1fr; }
       .grid-2 { grid-template-columns: 1fr; }
-      .cta-band { padding: 40px 22px; }
-      section { padding: 60px 0; }
+      .cta-band { padding: 42px 22px; }
+      section { padding: 62px 0; }
     }
   </style>
 </head>
@@ -241,8 +202,8 @@
   <header>
     <div class="wrap nav">
       <a href="#top" class="brand">
-        <span class="mark">NPB</span>
-        <span>National Property Buyers<small>Cash Home Buyers · All 50 States</small></span>
+        <img src="assets/img/npb-logo.png" alt="National Property Buyers logo" />
+        <span class="bname">National Property Buyers<small>Cash Home Buyers · All 50 States</small></span>
       </a>
       <nav class="nav-links" id="navLinks">
         <a href="#how">How It Works</a>
@@ -253,7 +214,7 @@
       </nav>
       <div class="nav-cta">
         <a href="tel:+16143826380" class="nav-phone">(614) 382-6380</a>
-        <a href="#contact" class="btn btn-primary" style="padding:11px 20px;font-size:.92rem;">Get My Offer</a>
+        <a href="#contact" class="btn btn-gold" style="padding:11px 20px;font-size:.92rem;">Get My Offer</a>
         <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">&#9776;</button>
       </div>
     </div>
@@ -262,47 +223,49 @@
   <!-- ===================== HERO ===================== -->
   <section class="hero" id="top" style="padding:0;">
     <div class="wrap">
-      <div>
-        <span class="eyebrow"><span class="dot"></span> Fair cash offers · Close in under 30 days</span>
-        <h1>Sell Your House <span class="accent">As-Is</span> — Fast, Fair, Hassle-Free</h1>
-        <p class="lead">No repairs. No commissions. No waiting on banks or agents. We make a fair written offer and close on your timeline.</p>
-        <div class="hero-actions">
-          <a href="#contact" class="btn btn-gold">Get My Cash Offer</a>
-          <a href="tel:+16143826380" class="btn btn-ghost">Call (614) 382-6380</a>
+      <div class="hero-grid">
+        <div>
+          <span class="eyebrow"><span class="line"></span> Fair cash offers · Close in under 30 days</span>
+          <h1>Sell Your House <em>As-Is</em> — Fast, Fair, Hassle-Free</h1>
+          <p class="lead">No repairs. No commissions. No waiting on banks or agents. We make a fair written offer and close on your timeline.</p>
+          <div class="pills">
+            <span class="pill"><span class="star">&#9733;</span> Any condition</span>
+            <span class="pill"><span class="star">&#9733;</span> Zero fees &amp; commissions</span>
+            <span class="pill"><span class="star">&#9733;</span> You pick the closing date</span>
+          </div>
+          <div class="hero-cta">
+            <a href="#contact" class="btn btn-gold">Get My Cash Offer</a>
+            <a href="tel:+16143826380" class="btn btn-ghost">Call (614) 382-6380</a>
+          </div>
         </div>
-        <div class="trust-row">
-          <span><span class="check">&#10003;</span> Any condition</span>
-          <span><span class="check">&#10003;</span> Zero fees &amp; commissions</span>
-          <span><span class="check">&#10003;</span> You pick the closing date</span>
-        </div>
-      </div>
 
-      <!-- Hero offer form -->
-      <div class="offer-card">
-        <h3>Get Your Free Cash Offer</h3>
-        <p class="sub">Tell us about your property — no obligation, no pressure.</p>
-        <form onsubmit="return sendOffer(event,'hero')">
-          <div class="field">
-            <label for="h-name">Full Name</label>
-            <input id="h-name" name="name" type="text" placeholder="Jane Smith" required />
-          </div>
-          <div class="grid-2">
+        <!-- Lead form card -->
+        <div class="lead-card">
+          <h3>Get Your Free Cash Offer</h3>
+          <p class="sub">Tell us about your property — no obligation, no pressure.</p>
+          <form onsubmit="return sendOffer(event,'hero')">
             <div class="field">
-              <label for="h-phone">Phone</label>
-              <input id="h-phone" name="phone" type="tel" placeholder="(555) 123-4567" required />
+              <label for="h-name">Full Name</label>
+              <input id="h-name" name="name" type="text" placeholder="Jane Smith" required />
+            </div>
+            <div class="grid-2">
+              <div class="field">
+                <label for="h-phone">Phone</label>
+                <input id="h-phone" name="phone" type="tel" placeholder="(555) 123-4567" required />
+              </div>
+              <div class="field">
+                <label for="h-email">Email</label>
+                <input id="h-email" name="email" type="email" placeholder="you@email.com" required />
+              </div>
             </div>
             <div class="field">
-              <label for="h-email">Email</label>
-              <input id="h-email" name="email" type="email" placeholder="you@email.com" required />
+              <label for="h-address">Property Address</label>
+              <input id="h-address" name="address" type="text" placeholder="123 Main St, City, State" required />
             </div>
-          </div>
-          <div class="field">
-            <label for="h-address">Property Address</label>
-            <input id="h-address" name="address" type="text" placeholder="123 Main St, City, State" required />
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;">Get My Free Offer &rarr;</button>
-          <p class="form-note">By submitting, you agree to be contacted about your offer. See our <a href="privacy-policy.html" style="color:var(--green);font-weight:600;">Privacy Policy</a>.</p>
-        </form>
+            <button type="submit" class="btn btn-navy btn-block">Get My Free Offer &rarr;</button>
+            <p class="form-note">By submitting, you agree to be contacted about your offer. See our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -316,69 +279,29 @@
         <p>From first contact to cash in hand, we keep it straightforward — most sellers go from offer to closing in under 30 days.</p>
       </div>
       <div class="steps">
-        <div class="step">
-          <div class="num">1</div>
-          <h4>Tell Us About It</h4>
-          <p>Submit your property details using the form or give us a quick call.</p>
-        </div>
-        <div class="step">
-          <div class="num">2</div>
-          <h4>We Reach Out</h4>
-          <p>Our team reviews the details and contacts you within 24 hours.</p>
-        </div>
-        <div class="step">
-          <div class="num">3</div>
-          <h4>Get a Written Offer</h4>
-          <p>Receive a fair, no-obligation cash offer in writing — no surprises.</p>
-        </div>
-        <div class="step">
-          <div class="num">4</div>
-          <h4>Close &amp; Get Paid</h4>
-          <p>Close at a reputable title company on your timeline and get your cash.</p>
-        </div>
+        <div class="step"><div class="num">1</div><h4>Tell Us About It</h4><p>Submit your property details using the form or give us a quick call.</p></div>
+        <div class="step"><div class="num">2</div><h4>We Reach Out</h4><p>Our team reviews the details and contacts you within 24 hours.</p></div>
+        <div class="step"><div class="num">3</div><h4>Get a Written Offer</h4><p>Receive a fair, no-obligation cash offer in writing — no surprises.</p></div>
+        <div class="step"><div class="num">4</div><h4>Close &amp; Get Paid</h4><p>Close at a reputable title company on your timeline and get your cash.</p></div>
       </div>
     </div>
   </section>
 
   <!-- ===================== WHY US ===================== -->
-  <section id="why" class="soft">
+  <section id="why" class="cream">
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Why Us</span>
         <h2>The easier way to sell your home</h2>
         <p>We buy houses directly — so you skip the repairs, the showings, and the fees that come with the traditional way.</p>
       </div>
-      <div class="benefits">
-        <div class="benefit">
-          <div class="ico">&#128296;</div>
-          <h4>No Repairs Needed</h4>
-          <p>We buy houses in any condition — leave the cleaning, fixing, and updating to us.</p>
-        </div>
-        <div class="benefit">
-          <div class="ico">&#128176;</div>
-          <h4>Zero Fees or Commissions</h4>
-          <p>No agent commissions, no hidden closing costs. The offer we make is the cash you keep.</p>
-        </div>
-        <div class="benefit">
-          <div class="ico">&#128197;</div>
-          <h4>Flexible Closing Date</h4>
-          <p>Need to move fast or need extra time? You choose the closing date that works for you.</p>
-        </div>
-        <div class="benefit">
-          <div class="ico">&#9889;</div>
-          <h4>Cash in Under 30 Days</h4>
-          <p>No waiting on bank approvals or financing. We pay cash and close quickly.</p>
-        </div>
-        <div class="benefit">
-          <div class="ico">&#128221;</div>
-          <h4>Fair Written Offers</h4>
-          <p>Every offer is put in writing with no obligation — review it on your own terms.</p>
-        </div>
-        <div class="benefit">
-          <div class="ico">&#127758;</div>
-          <h4>Nationwide Service</h4>
-          <p>We buy houses across all 50 states, with local closing handled by trusted title companies.</p>
-        </div>
+      <div class="why-grid">
+        <div class="why-card"><div class="ico">&#128296;</div><h4>No Repairs Needed</h4><p>We buy houses in any condition — leave the cleaning, fixing, and updating to us.</p></div>
+        <div class="why-card"><div class="ico">&#128176;</div><h4>Zero Fees or Commissions</h4><p>No agent commissions, no hidden closing costs. The offer we make is the cash you keep.</p></div>
+        <div class="why-card"><div class="ico">&#128197;</div><h4>Flexible Closing Date</h4><p>Need to move fast or need extra time? You choose the closing date that works for you.</p></div>
+        <div class="why-card"><div class="ico">&#9889;</div><h4>Cash in Under 30 Days</h4><p>No waiting on bank approvals or financing. We pay cash and close quickly.</p></div>
+        <div class="why-card"><div class="ico">&#128221;</div><h4>Fair Written Offers</h4><p>Every offer is put in writing with no obligation — review it on your own terms.</p></div>
+        <div class="why-card"><div class="ico">&#127758;</div><h4>Nationwide Service</h4><p>We buy houses across all 50 states, with local closing handled by trusted title companies.</p></div>
       </div>
     </div>
   </section>
@@ -393,50 +316,22 @@
       </div>
       <table class="compare-table">
         <thead>
-          <tr>
-            <th>&nbsp;</th>
-            <th class="you">National Property Buyers</th>
-            <th>Traditional Agent Sale</th>
-          </tr>
+          <tr><th>&nbsp;</th><th class="you">National Property Buyers</th><th>Traditional Agent Sale</th></tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="feature">Commissions / Fees</td>
-            <td class="us col-us">$0 — none</td>
-            <td class="them">~6% of sale price</td>
-          </tr>
-          <tr>
-            <td class="feature">Repairs &amp; Cleaning</td>
-            <td class="us col-us">None — we buy as-is</td>
-            <td class="them">Often required before listing</td>
-          </tr>
-          <tr>
-            <td class="feature">Showings</td>
-            <td class="us col-us">None</td>
-            <td class="them">Multiple, on buyers' schedules</td>
-          </tr>
-          <tr>
-            <td class="feature">Closing Timeline</td>
-            <td class="us col-us">As little as a few weeks</td>
-            <td class="them">60–90+ days on average</td>
-          </tr>
-          <tr>
-            <td class="feature">Financing Risk</td>
-            <td class="us col-us">None — cash offer</td>
-            <td class="them">Deals can fall through</td>
-          </tr>
-          <tr>
-            <td class="feature">Who Pays Closing Costs</td>
-            <td class="us col-us">We cover them</td>
-            <td class="them">Typically the seller</td>
-          </tr>
+          <tr><td class="feature">Commissions / Fees</td><td class="us col-us">$0 — none</td><td class="them">~6% of sale price</td></tr>
+          <tr><td class="feature">Repairs &amp; Cleaning</td><td class="us col-us">None — we buy as-is</td><td class="them">Often required before listing</td></tr>
+          <tr><td class="feature">Showings</td><td class="us col-us">None</td><td class="them">Multiple, on buyers' schedules</td></tr>
+          <tr><td class="feature">Closing Timeline</td><td class="us col-us">As little as a few weeks</td><td class="them">60–90+ days on average</td></tr>
+          <tr><td class="feature">Financing Risk</td><td class="us col-us">None — cash offer</td><td class="them">Deals can fall through</td></tr>
+          <tr><td class="feature">Who Pays Closing Costs</td><td class="us col-us">We cover them</td><td class="them">Typically the seller</td></tr>
         </tbody>
       </table>
     </div>
   </section>
 
   <!-- ===================== REVIEWS ===================== -->
-  <section id="reviews" class="soft">
+  <section id="reviews" class="cream">
     <div class="wrap">
       <div class="section-head">
         <span class="tag">Reviews</span>
@@ -444,26 +339,10 @@
         <p>Real situations, real relief — here's what working with us looks like.</p>
       </div>
       <div class="reviews">
-        <div class="review">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>"I was behind on payments and facing foreclosure. They moved fast, made a fair offer, and I was able to walk away with cash before it was too late."</p>
-          <div class="who">Marcus T.<small>Avoided foreclosure</small></div>
-        </div>
-        <div class="review">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>"We were downsizing and didn't want the hassle of repairs and showings. They bought our home as-is and made the whole thing simple."</p>
-          <div class="who">Linda &amp; Ray P.<small>Downsizing made easy</small></div>
-        </div>
-        <div class="review">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>"A job change meant I had to relocate quickly. They closed on my timeline and took all the stress out of selling."</p>
-          <div class="who">Priya N.<small>Fast relocation</small></div>
-        </div>
-        <div class="review">
-          <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-          <p>"I inherited a property I couldn't manage from out of state. They handled everything and gave me a fair cash offer — such a relief."</p>
-          <div class="who">David R.<small>Inherited property</small></div>
-        </div>
+        <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"I was behind on payments and facing foreclosure. They moved fast, made a fair offer, and I was able to walk away with cash before it was too late."</p><div class="who">Marcus T.<small>Avoided foreclosure</small></div></div>
+        <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"We were downsizing and didn't want the hassle of repairs and showings. They bought our home as-is and made the whole thing simple."</p><div class="who">Linda &amp; Ray P.<small>Downsizing made easy</small></div></div>
+        <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"A job change meant I had to relocate quickly. They closed on my timeline and took all the stress out of selling."</p><div class="who">Priya N.<small>Fast relocation</small></div></div>
+        <div class="review"><div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div><p>"I inherited a property I couldn't manage from out of state. They handled everything and gave me a fair cash offer — such a relief."</p><div class="who">David R.<small>Inherited property</small></div></div>
       </div>
     </div>
   </section>
@@ -485,63 +364,32 @@
   <!-- ===================== CONTACT ===================== -->
   <section id="contact">
     <div class="wrap">
-      <div class="contact-info">
-        <h2>Get your free, no-obligation offer</h2>
-        <p class="intro">Fill out the form and our team will reach out within 24 hours. Prefer to talk? Call or email us directly.</p>
-        <div class="contact-list">
-          <div class="contact-item">
-            <div class="ico">&#9742;</div>
-            <div>
-              <div class="label">Phone</div>
-              <a href="tel:+16143826380" class="val">(614) 382-6380</a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="ico">&#9993;</div>
-            <div>
-              <div class="label">Email</div>
-              <a href="mailto:offers@nationalpropertybuyers.net" class="val">offers@nationalpropertybuyers.net</a>
-            </div>
-          </div>
-          <div class="contact-item">
-            <div class="ico">&#127758;</div>
-            <div>
-              <div class="label">Service Area</div>
-              <div class="val">All 50 states</div>
-            </div>
+      <div class="grid">
+        <div class="contact-info">
+          <h2>Get your free, no-obligation offer</h2>
+          <p class="intro">Fill out the form and our team will reach out within 24 hours. Prefer to talk? Call or email us directly.</p>
+          <div class="contact-list">
+            <div class="contact-item"><div class="ico">&#9742;</div><div><div class="label">Phone</div><a href="tel:+16143826380" class="val">(614) 382-6380</a></div></div>
+            <div class="contact-item"><div class="ico">&#9993;</div><div><div class="label">Email</div><a href="mailto:offers@nationalpropertybuyers.net" class="val">offers@nationalpropertybuyers.net</a></div></div>
+            <div class="contact-item"><div class="ico">&#127758;</div><div><div class="label">Service Area</div><div class="val">All 50 states</div></div></div>
           </div>
         </div>
-      </div>
 
-      <div class="contact-form">
-        <h3>Request My Cash Offer</h3>
-        <p class="sub">No obligation. No fees. No pressure.</p>
-        <form onsubmit="return sendOffer(event,'contact')">
-          <div class="grid-2">
-            <div class="field">
-              <label for="c-name">Full Name</label>
-              <input id="c-name" name="name" type="text" placeholder="Jane Smith" required />
+        <div class="contact-form">
+          <h3>Request My Cash Offer</h3>
+          <p class="sub">No obligation. No fees. No pressure.</p>
+          <form onsubmit="return sendOffer(event,'contact')">
+            <div class="grid-2">
+              <div class="field"><label for="c-name">Full Name</label><input id="c-name" name="name" type="text" placeholder="Jane Smith" required /></div>
+              <div class="field"><label for="c-phone">Phone</label><input id="c-phone" name="phone" type="tel" placeholder="(555) 123-4567" required /></div>
             </div>
-            <div class="field">
-              <label for="c-phone">Phone</label>
-              <input id="c-phone" name="phone" type="tel" placeholder="(555) 123-4567" required />
-            </div>
-          </div>
-          <div class="field">
-            <label for="c-email">Email</label>
-            <input id="c-email" name="email" type="email" placeholder="you@email.com" required />
-          </div>
-          <div class="field">
-            <label for="c-address">Property Address</label>
-            <input id="c-address" name="address" type="text" placeholder="123 Main St, City, State, ZIP" required />
-          </div>
-          <div class="field">
-            <label for="c-condition">Property Condition / Anything we should know</label>
-            <textarea id="c-condition" name="condition" placeholder="Tell us about the property, your timeline, or any details..."></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:100%;">Get My Free Offer &rarr;</button>
-          <p class="form-note">By submitting, you agree to be contacted about your offer. See our <a href="privacy-policy.html" style="color:var(--green);font-weight:600;">Privacy Policy</a>.</p>
-        </form>
+            <div class="field"><label for="c-email">Email</label><input id="c-email" name="email" type="email" placeholder="you@email.com" required /></div>
+            <div class="field"><label for="c-address">Property Address</label><input id="c-address" name="address" type="text" placeholder="123 Main St, City, State, ZIP" required /></div>
+            <div class="field"><label for="c-condition">Property Condition / Anything we should know</label><textarea id="c-condition" name="condition" placeholder="Tell us about the property, your timeline, or any details..."></textarea></div>
+            <button type="submit" class="btn btn-gold btn-block">Get My Free Offer &rarr;</button>
+            <p class="form-note">By submitting, you agree to be contacted about your offer. See our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -552,8 +400,8 @@
       <div class="footer-top">
         <div class="footer-brand">
           <a href="#top" class="brand">
-            <span class="mark">NPB</span>
-            <span style="color:#fff;">National Property Buyers</span>
+            <img src="assets/img/npb-logo.png" alt="National Property Buyers logo" />
+            <span class="bname">National Property Buyers</span>
           </a>
           <p>We buy houses as-is for cash across all 50 states. Fair written offers, no commissions, and closings on your timeline.</p>
         </div>
@@ -582,38 +430,27 @@
 
   <!-- ===================== SCRIPTS ===================== -->
   <script>
-    // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Mobile menu
     var toggle = document.getElementById('menuToggle');
     var links = document.getElementById('navLinks');
     if (toggle) {
       toggle.addEventListener('click', function () { links.classList.toggle('open'); });
-      links.querySelectorAll('a').forEach(function (a) {
-        a.addEventListener('click', function () { links.classList.remove('open'); });
-      });
+      links.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', function () { links.classList.remove('open'); }); });
     }
 
     // Form handler — composes an email to your inbox (works on static hosting with no backend).
-    // To use a form service instead (e.g. Formspree), see the note in the README.
+    // To use a form service instead (e.g. Formspree), see HOSTINGER-INSTRUCTIONS.md.
     function sendOffer(e, source) {
       e.preventDefault();
       var f = e.target;
       var get = function (n) { var el = f.querySelector('[name="' + n + '"]'); return el ? el.value : ''; };
-      var name = get('name'), phone = get('phone'), email = get('email'),
-          address = get('address'), condition = get('condition');
+      var name = get('name'), phone = get('phone'), email = get('email'), address = get('address'), condition = get('condition');
       var subject = 'New Cash Offer Request — ' + (name || 'Website');
-      var body =
-        'New offer request from the website (' + source + ' form):\n\n' +
-        'Name: ' + name + '\n' +
-        'Phone: ' + phone + '\n' +
-        'Email: ' + email + '\n' +
-        'Property Address: ' + address + '\n' +
-        (condition ? 'Notes / Condition: ' + condition + '\n' : '');
-      window.location.href = 'mailto:offers@nationalpropertybuyers.net'
-        + '?subject=' + encodeURIComponent(subject)
-        + '&body=' + encodeURIComponent(body);
+      var body = 'New offer request from the website (' + source + ' form):\n\n'
+        + 'Name: ' + name + '\n' + 'Phone: ' + phone + '\n' + 'Email: ' + email + '\n'
+        + 'Property Address: ' + address + '\n' + (condition ? 'Notes / Condition: ' + condition + '\n' : '');
+      window.location.href = 'mailto:offers@nationalpropertybuyers.net?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
       return false;
     }
   </script>

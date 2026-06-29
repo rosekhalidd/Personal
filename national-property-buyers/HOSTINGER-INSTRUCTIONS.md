@@ -8,6 +8,13 @@ CSS or JS files to manage. Just upload these two files.
 |------|------------|
 | `index.html` | Your main homepage (hero, how it works, why us, compare, reviews, contact form) |
 | `privacy-policy.html` | The new Privacy Policy page (adapted from yocapitalcash.com for National Property Buyers) |
+| `assets/img/npb-logo.png` | Your existing NPB logo (already on your server — included here as a backup) |
+
+**Branding:** These pages match your live site — navy `#0c1a3c` + gold `#d4972a`,
+warm cream sections, **Playfair Display** headings on **Inter** body, and your
+circular NPB logo. Both pages load the logo from `assets/img/npb-logo.png`, which
+already exists in your `public_html` — so you do **not** need to re-upload the
+logo. (It's bundled here only as a backup.)
 
 The homepage links to the privacy policy in **two places**: the form fine print
 and the footer. The privacy policy links back to the homepage.

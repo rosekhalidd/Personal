@@ -8,58 +8,66 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --navy: #0f2a43;
-      --navy-deep: #0a1f33;
-      --green: #1f9d5b;
-      --green-dark: #167a46;
-      --ink: #1d2a35;
-      --muted: #5b6b78;
-      --line: #e4e9ee;
-      --bg-soft: #f5f8fa;
+      --navy: #0c1a3c;
+      --navy-2: #11244e;
+      --gold: #d4972a;
+      --gold-soft: #e3b25a;
+      --ink: #0a1226;
+      --cream: #f6f3ec;
+      --paper: #ffffff;
+      --muted: #5b6478;
+      --line: rgba(212, 151, 42, .35);
+      --maxw: 900px;
+      --serif: "Playfair Display", Georgia, "Times New Roman", serif;
+      --sans: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      color: var(--ink); line-height: 1.7; -webkit-font-smoothing: antialiased; background: #fff;
-    }
-    a { color: var(--green); text-decoration: none; }
+    body { font-family: var(--sans); color: var(--ink); line-height: 1.75; -webkit-font-smoothing: antialiased; background: var(--paper); }
+    h1, h2, h3 { font-family: var(--serif); line-height: 1.15; font-weight: 700; }
+    a { color: var(--gold); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .wrap { width: 100%; max-width: 880px; margin: 0 auto; padding: 0 22px; }
+    .wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 22px; }
 
     /* Header */
-    header { background: rgba(255,255,255,.96); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); }
-    .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; max-width: 1140px; margin: 0 auto; padding: 0 22px; }
-    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 1.18rem; color: var(--navy); }
-    .brand .mark { width: 38px; height: 38px; border-radius: 9px; background: linear-gradient(135deg, var(--green), var(--navy)); display: grid; place-items: center; color: #fff; font-size: 1.1rem; }
-    .brand small { display: block; font-size: .68rem; font-weight: 600; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
-    .back { font-weight: 600; color: var(--navy); font-size: .95rem; }
-    .back:hover { color: var(--green); text-decoration: none; }
+    header { background: rgba(12,26,60,.97); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(8px); }
+    .nav { display: flex; align-items: center; justify-content: space-between; height: 78px; max-width: 1180px; margin: 0 auto; padding: 0 22px; }
+    .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
+    .brand img { height: 52px; width: auto; border-radius: 50%; }
+    .brand .bname { font-family: var(--serif); font-weight: 700; font-size: 1.16rem; line-height: 1.1; }
+    .brand .bname small { display: block; font-family: var(--sans); font-size: .66rem; font-weight: 600; color: var(--gold-soft); letter-spacing: 1.2px; text-transform: uppercase; margin-top: 2px; }
+    .back { font-family: var(--sans); font-weight: 600; color: #fff; font-size: .95rem; }
+    .back:hover { color: var(--gold); text-decoration: none; }
 
     /* Hero strip */
-    .page-hero { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-deep) 100%); color: #fff; padding: 56px 0; }
-    .page-hero h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); letter-spacing: -.5px; }
-    .page-hero p { margin-top: 10px; color: rgba(255,255,255,.8); }
+    .page-hero { position: relative; overflow: hidden; background: linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 58px 0; }
+    .page-hero::after { content: ""; position: absolute; left: -6%; top: -30%; width: 50%; height: 160%; border-right: 3px solid var(--gold); transform: skewX(-12deg); opacity: .45; }
+    .page-hero .wrap { position: relative; z-index: 2; }
+    .page-hero .eyebrow { font-family: var(--sans); text-transform: uppercase; letter-spacing: .16em; font-size: .76rem; font-weight: 700; color: var(--gold-soft); margin-bottom: 10px; display: block; }
+    .page-hero h1 { font-size: clamp(2rem, 4vw, 2.9rem); letter-spacing: .01em; }
+    .page-hero p { font-family: var(--sans); margin-top: 10px; color: #d7dded; }
 
     /* Body */
-    .content { padding: 56px 0 80px; }
-    .content h2 { color: var(--navy); font-size: 1.32rem; margin: 36px 0 12px; letter-spacing: -.3px; }
-    .content h3 { color: var(--navy); font-size: 1.06rem; margin: 22px 0 8px; }
+    .content { padding: 56px 0 84px; }
+    .content h2 { color: var(--navy); font-size: 1.42rem; margin: 38px 0 12px; }
+    .content h3 { color: var(--navy); font-size: 1.1rem; margin: 22px 0 8px; }
     .content p { margin: 0 0 14px; color: var(--ink); }
     .content ul { margin: 0 0 16px 22px; }
-    .content li { margin-bottom: 8px; }
+    .content li { margin-bottom: 9px; }
     .content strong { color: var(--navy); }
-    .callout { background: var(--bg-soft); border-left: 4px solid var(--green); border-radius: 8px; padding: 16px 20px; margin: 18px 0; }
+    .callout { background: var(--cream); border-left: 4px solid var(--gold); border-radius: 8px; padding: 16px 20px; margin: 18px 0; }
     .meta { color: var(--muted); font-size: .92rem; margin-bottom: 8px; }
-    hr { border: 0; border-top: 1px solid var(--line); margin: 36px 0; }
+    hr { border: 0; border-top: 1px solid var(--line); margin: 38px 0; }
 
     /* Footer */
-    footer { background: var(--navy-deep); color: rgba(255,255,255,.7); padding: 36px 0; text-align: center; font-size: .9rem; }
-    footer a { color: rgba(255,255,255,.85); }
+    footer { background: var(--ink); color: rgba(255,255,255,.7); padding: 38px 0; text-align: center; font-size: .9rem; font-family: var(--sans); }
+    footer a { color: var(--gold-soft); }
+
+    @media (max-width: 600px) { .back { display: none; } }
   </style>
 </head>
 <body>
@@ -67,8 +75,8 @@
   <header>
     <div class="nav">
       <a href="index.html" class="brand">
-        <span class="mark">NPB</span>
-        <span>National Property Buyers<small>Cash Home Buyers · All 50 States</small></span>
+        <img src="assets/img/npb-logo.png" alt="National Property Buyers logo" />
+        <span class="bname">National Property Buyers<small>Cash Home Buyers · All 50 States</small></span>
       </a>
       <a href="index.html" class="back">&larr; Back to Home</a>
     </div>
@@ -76,8 +84,9 @@
 
   <section class="page-hero">
     <div class="wrap">
+      <span class="eyebrow">National Property Buyers</span>
       <h1>Privacy Policy</h1>
-      <p>How National Property Buyers collects, uses, and protects your information.</p>
+      <p>How we collect, use, and protect your information.</p>
     </div>
   </section>
 
